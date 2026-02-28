@@ -278,7 +278,10 @@ async function readSecret() {
 // Function to write secrets to a .env-like file
 function writeSecretsToFile(secretData, destFilePath) {
   const secretLines = Object.entries(secretData)
-    .map(([key, value]) => `${key}=${value}`)
+    .map(([key, value]) => {
+      const escaped = String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+      return `${key}="${escaped}"`;
+    })
     .join("\n");
 
   // Ensure destination directory exists
